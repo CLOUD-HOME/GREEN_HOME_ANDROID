@@ -18,7 +18,7 @@
 	<string name="item_list">当前种类的物品</string>
 	<string name="item_name">标题：</string>
 	<string name="item_content">内容：</string>
-	<string name="item_desc">物品描述：</string>
+	<string name="item_author">作者：</string>
 	<string name="win_price">赢取价格：</string>
 	<string name="max_price">最高竞价：</string>
 	<string name="remark">物品备注：</string>

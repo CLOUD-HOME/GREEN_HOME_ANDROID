@@ -1,12 +1,14 @@
 package com.cloud.test;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.cloud.util.DialogUtil;
@@ -19,7 +21,8 @@ import org.json.JSONObject;
 
 public class MainActivity extends Activity {
 
-    private ListView alist = null;
+    private ListView alist;
+    private Button bnAdd;
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
@@ -28,6 +31,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.view_item);
 
         alist = (ListView) findViewById(R.id.aList);
+        bnAdd = (Button) findViewById(R.id.bn_home);
         String url = HttpUtil.BASE_URL + "AArticleServlet?typeid=100&method=query";
 
         //StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
@@ -61,6 +65,14 @@ public class MainActivity extends Activity {
             {
                 // 查看指定物品的详细情况。
                 viewItemDetail(position);
+            }
+        });
+
+        bnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
+                startActivity(intent);
             }
         });
     }
