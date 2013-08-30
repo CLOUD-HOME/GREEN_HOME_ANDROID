@@ -1,12 +1,15 @@
 package com.cloud.test;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.cloud.util.DialogUtil;
 import com.cloud.util.HttpUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +21,20 @@ public class AddArticleActivity extends Activity {
 
     private Button bnAdd, bnCancel;
     private EditText title, author, content;
+    Bundle extras = null;
+
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_item);
+
+        extras = getIntent().getExtras();
+        String name = null;
+        try {
+            JSONObject user = new JSONObject(extras.getString("user"));
+            name = user.getString("name") == null ? "admin" :  user.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         bnAdd = (Button) findViewById(R.id.bnAdd);
         bnCancel = (Button) findViewById(R.id.bnCancel);
@@ -28,6 +42,8 @@ public class AddArticleActivity extends Activity {
         title = (EditText) findViewById(R.id.itemTitle);
         author = (EditText) findViewById(R.id.itemAuthor);
         content = (EditText) findViewById(R.id.itemContent);
+
+        author.setText(name);
 
         bnCancel.setOnClickListener(new FinishListener(this));
         bnAdd.setOnClickListener(new View.OnClickListener(){
@@ -40,6 +56,10 @@ public class AddArticleActivity extends Activity {
 
                 try{
                     String result = addArticle(t, a, c);
+                    Intent intent = new Intent(AddArticleActivity.this, MainActivity.class);
+                    intent.putExtra("user", new JSONObject(extras.getString("user")).toString());
+                    startActivity(intent);
+                    finish();
                 }catch (Exception e) {
                     DialogUtil.showDialog(AddArticleActivity.this, "no response", false);
                     e.printStackTrace();
@@ -50,10 +70,12 @@ public class AddArticleActivity extends Activity {
 
     private String addArticle(String name, String author, String content) throws Exception{
         Map<String , String> map = new HashMap<String, String>();
+        JSONObject user = new JSONObject(extras.getString("user"));
+        System.out.println("###############" + user.getString("id") + "#####################");
         map.put("title" , name);
         map.put("author" , author);
         map.put("content" , content);
-        map.put("userid", null);
+        map.put("userid", user.getString("id"));
         String url = HttpUtil.BASE_URL + "AArticleServlet?typeid=100&method=insert";
         return HttpUtil.postRequest(url, map);
     }

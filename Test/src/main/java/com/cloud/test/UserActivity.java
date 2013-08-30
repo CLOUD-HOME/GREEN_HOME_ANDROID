@@ -3,6 +3,9 @@ package com.cloud.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.StrictMode;
 import android.widget.ImageView;
 import com.cloud.util.DialogUtil;
 import com.cloud.util.HttpUtil;
@@ -31,14 +34,20 @@ public class UserActivity extends Activity
 	private EditText etName, etPass;
 	private Button bnLogin, bnCancel;
     private ImageView imgLogo;
+    private JSONObject user;
 
-	@Override
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    @Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		// ��ȡ�����������༭��
-		etName = (EditText) findViewById(R.id.userEditText);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+
+
+        etName = (EditText) findViewById(R.id.userEditText);
 		etPass = (EditText) findViewById(R.id.pwdEditText);
 		etName.setText("tomcat");
 		etPass.setText("tomcat");
@@ -56,12 +65,13 @@ public class UserActivity extends Activity
 					if (loginPro())
 					{
 						Intent intent = new Intent(UserActivity.this, MainActivity.class);
+                        intent.putExtra("user", user.toString());
 						startActivity(intent);
 						finish();
 					}
 					else
 					{
-						DialogUtil.showDialog(UserActivity.this,"", false);
+						DialogUtil.showDialog(UserActivity.this,"login failure!", false);
 					}
 				}
 			}
@@ -82,18 +92,17 @@ public class UserActivity extends Activity
 	{
 		String username = etName.getText().toString();
 		String pwd = etPass.getText().toString();
-		JSONObject jsonObj;
 		try
 		{
-			jsonObj = query(username, pwd);
-			if (jsonObj.getInt("userId") > 0)
+			user = query(username, pwd);
+			if (user.getInt("id") > 0)
 			{
 				return true;
 			}
 		}
 		catch (Exception e)
 		{
-			DialogUtil.showDialog(this, "", false);
+			DialogUtil.showDialog(this, "on response!", false);
 			e.printStackTrace();
 		}
 
@@ -105,13 +114,13 @@ public class UserActivity extends Activity
 		String username = etName.getText().toString().trim();
 		if (username.equals(""))
 		{
-			DialogUtil.showDialog(this,"", false);
+			DialogUtil.showDialog(this,"username not empty!", false);
 			return false;
 		}
 		String pwd = etPass.getText().toString().trim();
 		if (pwd.equals(""))
 		{
-			DialogUtil.showDialog(this, "", false);
+			DialogUtil.showDialog(this, "password not empty!", false);
 			return false;
 		}
 		return true;
@@ -120,9 +129,9 @@ public class UserActivity extends Activity
 	private JSONObject query(String username, String password) throws Exception
 	{
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("user", username);
-		map.put("pass", password);
-		String url = HttpUtil.BASE_URL + "login.jsp";
+		map.put("name", username);
+		map.put("password", password);
+		String url = HttpUtil.BASE_URL + "AUserServlet?method=login";
 		return new JSONObject(HttpUtil.postRequest(url, map));
 	}
 }

@@ -24,18 +24,21 @@ public class MainActivity extends Activity {
     private ListView alist;
     private Button bnAdd;
 
+
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_item);
+        final Bundle extras = getIntent().getExtras();
+        System.out.print("###########################" + extras.toString());
 
         alist = (ListView) findViewById(R.id.aList);
         bnAdd = (Button) findViewById(R.id.bn_home);
         String url = HttpUtil.BASE_URL + "AArticleServlet?typeid=100&method=query";
 
-        //StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        //StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
 
 
@@ -72,6 +75,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddArticleActivity.class);
+                intent.putExtra("user",extras.getString("user"));
                 startActivity(intent);
             }
         });

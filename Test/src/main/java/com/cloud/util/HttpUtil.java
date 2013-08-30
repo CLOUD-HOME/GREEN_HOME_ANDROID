@@ -31,8 +31,8 @@ public class HttpUtil
     // 创建HttpClient对象
     public static HttpClient httpClient = new DefaultHttpClient();
     public static String BASE_URL =
-            //"http://cloud.sturgeon.mopaas.com/";
-            "http://192.168.1.104:8080/test/";
+            "http://cloud.sturgeon.mopaas.com/";
+            //"http://10.0.2.2:8080/test/";
     /**
      *
      * @param url 发送请求的URL
