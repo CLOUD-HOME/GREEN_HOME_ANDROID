@@ -43,14 +43,26 @@ public class UserActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+        //StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+        //StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
 
+        try {
+            user = islogin();
+            if (user.getInt("id") > 0) {
+                Intent intent = new Intent(UserActivity.this, MainActivity.class);
+                intent.putExtra("user", user.toString());
+                startActivity(intent);
+                finish();
+            }
+        } catch (Exception e) {
+            //DialogUtil.showDialog(this, "on response!", false);
+            e.printStackTrace();
+        }
 
         etName = (EditText) findViewById(R.id.userEditText);
 		etPass = (EditText) findViewById(R.id.pwdEditText);
-		etName.setText("tomcat");
-		etPass.setText("tomcat");
+		etName.setText("");
+		etPass.setText("");
 		bnLogin = (Button) findViewById(R.id.bnLogin);
 		bnCancel = (Button) findViewById(R.id.bnCancel);
         imgLogo = (ImageView) findViewById(R.id.logoImageView);
@@ -81,10 +93,12 @@ public class UserActivity extends Activity
 
             @Override
             public void onClick(View view) {
+                /*
                 Intent intent = new Intent(UserActivity.this, MainActivity.class);
                 intent.putExtra("user", "{\"id\":9999,\"sex\":\"1\",\"time\":\"Fri Aug 30 18:00:33 CST 2013\",\"name\":\"admin\",\"password\":\"admin\"}");
                 startActivity(intent);
                 finish();
+                 */
             }
         });
 	}
@@ -135,4 +149,10 @@ public class UserActivity extends Activity
 		String url = HttpUtil.BASE_URL + "AUserServlet?method=login";
 		return new JSONObject(HttpUtil.postRequest(url, map));
 	}
+
+    private JSONObject islogin() throws Exception
+    {
+        String url = HttpUtil.BASE_URL + "AUserServlet?method=islogin";
+        return new JSONObject(HttpUtil.getRequest(url));
+    }
 }
