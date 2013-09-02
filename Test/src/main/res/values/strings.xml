@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="hello">Hello World, Login!</string>
-	<string name="app_name">电子拍卖系统客户端</string>
+	<string name="app_name">绿色之家技术交流网站</string>
 	<string name="user_name">用户账户：</string>
 	<string name="user_pass">用户口令：</string>
 	<string name="login">登录</string>
 	<string name="add">添加</string>
 	<string name="bid">竞价</string>
 	<string name="cancel">取消</string>
-	<string name="welcome">欢迎使用电子拍卖系统</string>
-	<string name="view_succ">浏览竞得物品</string>
+	<string name="welcome">欢迎登录绿色之家网站</string>
+	<string name="view_succ">浏览我的发言</string>
 	<string name="view_bid">您参与竞标的物品</string>
 	<string name="view_fail">浏览流拍物品</string>
 	<string name="manage_item">您当前的拍卖物品</string>
@@ -29,7 +29,7 @@
 	<string name="bid_time">竞标时间：</string>
 	<string name="bid_user">竞标人：</string>
 	<string name="add_kind_title">添加物品种类</string>
-	<string name="add_item_title">添加拍卖物品</string>
+	<string name="add_item_title">添加新的发言</string>
 	<string name="kind_name">种类名称：</string>
 	<string name="kind_desc">种类描述：</string>
 	<string name="item_detail_title">物品详情</string>

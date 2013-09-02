@@ -82,6 +82,7 @@ public class UserActivity extends Activity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UserActivity.this, MainActivity.class);
+                intent.putExtra("user", "{\"id\":9999,\"sex\":\"1\",\"time\":\"Fri Aug 30 18:00:33 CST 2013\",\"name\":\"admin\",\"password\":\"admin\"}");
                 startActivity(intent);
                 finish();
             }
